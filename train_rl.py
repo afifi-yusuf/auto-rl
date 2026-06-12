@@ -37,7 +37,7 @@ import harness
 SEED = 0
 LEARNING_RATE = 1e-6
 GROUP_SIZE = 16            # larger G -> lower-variance advantages on hard conversions
-PROMPTS_PER_STEP = None    # None -> use scale preset
+PROMPTS_PER_STEP = 4       # fewer prompts/step -> more GRPO updates under G=16 cost
 SAMPLING_TEMPERATURE = 1.0
 MAX_NEW_TOKENS = None      # None -> use scale preset
 KL_COEF = 0.0              # >0 loads a frozen reference model for a KL penalty

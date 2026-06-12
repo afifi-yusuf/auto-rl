@@ -3,3 +3,6 @@ baseline	2026-06-12T02:10:13	525e040	0.1250	+0.0000	1	baseline train_rl.py
 baseline	2026-06-12T02:16:57	ef3819a	0.1250	+0.0000	1	baseline train_rl.py
 1781230620_1	2026-06-12T02:19:31	ef3819a	0.1250	+0.0000	0	Add a 0.1 format bonus for completions that use the `####` answer format even when numerically wrong, so all-fail GRPO groups still get a learning signal toward GSM8K's required output structure.
 1781230772_2	2026-06-12T02:21:20	ef3819a	0.0000	-0.1250	0	Raise AdamW learning rate from 1e-6 to 5e-6 so GRPO policy updates are large enough to improve GSM8K verified accuracy within the fixed training budget.
+baseline	2026-06-12T02:31:34	303067b	0.7500	+0.0000	1	baseline train_rl.py
+1781231497_1	2026-06-12T02:33:23	303067b	0.7500	+0.0000	0	Add a graded near-miss reward (up to 0.25 for answers within 5% relative error) so hard unit-conversion groups that fail the strict verifier still produce GRPO learning signal.
+1781231603_2	2026-06-12T02:36:13	303067b	0.8750	+0.1250	1	Increase GRPO group size from 8 to 16 so mixed-reward groups occur more often and advantage estimates are less noisy on hard unit-conversion prompts.
