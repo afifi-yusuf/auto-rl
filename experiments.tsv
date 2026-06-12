@@ -1,2 +1,5 @@
 id	timestamp	parent_commit	eval_acc	delta	kept	note
 baseline	2026-06-12T02:10:13	525e040	0.1250	+0.0000	1	baseline train_rl.py
+baseline	2026-06-12T02:16:57	ef3819a	0.1250	+0.0000	1	baseline train_rl.py
+1781230620_1	2026-06-12T02:19:31	ef3819a	0.1250	+0.0000	0	Add a 0.1 format bonus for completions that use the `####` answer format even when numerically wrong, so all-fail GRPO groups still get a learning signal toward GSM8K's required output structure.
+1781230772_2	2026-06-12T02:21:20	ef3819a	0.0000	-0.1250	0	Raise AdamW learning rate from 1e-6 to 5e-6 so GRPO policy updates are large enough to improve GSM8K verified accuracy within the fixed training budget.
