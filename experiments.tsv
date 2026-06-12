@@ -6,3 +6,6 @@ baseline	2026-06-12T02:16:57	ef3819a	0.1250	+0.0000	1	baseline train_rl.py
 baseline	2026-06-12T02:31:34	303067b	0.7500	+0.0000	1	baseline train_rl.py
 1781231497_1	2026-06-12T02:33:23	303067b	0.7500	+0.0000	0	Add a graded near-miss reward (up to 0.25 for answers within 5% relative error) so hard unit-conversion groups that fail the strict verifier still produce GRPO learning signal.
 1781231603_2	2026-06-12T02:36:13	303067b	0.8750	+0.1250	1	Increase GRPO group size from 8 to 16 so mixed-reward groups occur more often and advantage estimates are less noisy on hard unit-conversion prompts.
+1781231774_3	2026-06-12T02:53:49	d03ef31	0.7500	-0.1250	0	Halve prompts_per_step from 8 to 4 to restore step throughput after doubling group size to 16, enabling more GRPO updates within the fixed wall-clock budget while keeping lower-variance advantages.
+1781232822_1	2026-06-12T02:59:21	ccce04a	0.0000	+0.0000	0	Lower sampling temperature from 1.0 to 0.7 so unit-conversion rollouts are numerically sharper while G=16 preserves within-group diversity for GRPO advantage estimates.
+1781233161_2	2026-06-12T03:02:18	ccce04a	0.8750	+0.8750	1	Restore prompts_per_step to the scale default (8) because halving it to 4 regressed eval_acc from 0.875 to 0.75 under G=16 despite aiming for more GRPO steps within the wall-clock budget.
