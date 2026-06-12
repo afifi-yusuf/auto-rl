@@ -1,0 +1,36 @@
+{
+  "slug": "units",
+  "domain_text": "Be an expert at unit conversions between metric and imperial units of length, mass, volume, and between units of time. Each problem asks to convert a given quantity to a target unit; the answer is a single number. IMPORTANT VERIFIER REQUIREMENT: a small base model cannot produce exact many-decimal answers, so an exact 6-decimal match yields zero learning signal. The verify() function MUST accept an answer when it is within a 1.5% relative tolerance of the reference (use math.isclose(ans, ref, rel_tol=0.015, abs_tol=1e-6)), and should also accept when both values round to 3 significant figures. Include a healthy share of EASY problems (metric-prefix conversions like km->m, and time conversions like hours->seconds) so a base model has a non-zero baseline accuracy.",
+  "name": "Unit conversions",
+  "description": "Convert quantities between metric and imperial units of length, mass, and volume, and between common units of time. Each problem gives a value in one unit and asks for the equivalent in a target unit; the answer is a single number.",
+  "source_type": "generator",
+  "source_detail": "Deterministic seeded generator over exact NIST/US conversion factors (length, mass, volume) and standard time ratios. Roughly half of problems are easy metric-prefix or time conversions; the rest mix metric/imperial cross-system conversions. Train IDs 0-7999, held-out eval IDs 8000+ with prompt-level deduplication against train.",
+  "answer_format": "Final answer on its own line as '#### <number>'.",
+  "verifier_description": "Programmatic numeric grading: parse the model's number (prefer '#### <number>', else last number), strip commas, accept if math.isclose(ans, ref, rel_tol=0.015, abs_tol=1e-6) OR if both values agree to 3 significant figures. No LLM judgement.",
+  "sample_problems": [
+    {
+      "prompt": "Convert 5 kilometers to meters.",
+      "reference": "5000",
+      "gold_answer": "5000"
+    },
+    {
+      "prompt": "How many seconds are in 2 hours?",
+      "reference": "7200",
+      "gold_answer": "7200"
+    },
+    {
+      "prompt": "Convert 5 kilometers to miles.",
+      "reference": "3.106856",
+      "gold_answer": "3.11"
+    },
+    {
+      "prompt": "How many pounds are in 10 kilograms?",
+      "reference": "22.046226",
+      "gold_answer": "22.0"
+    }
+  ],
+  "n_train": 8000,
+  "n_eval": 1000,
+  "baseline_accuracy": 0.75,
+  "created_at": "2026-06-11T00:00:00Z"
+}

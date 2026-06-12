@@ -68,11 +68,11 @@ Tab-separated, append-only ledger of every experiment:
 the main line of progress; `kept=0` rows were reverted. Use it as memory.
 
 <!-- ACTIVE-DOMAIN:BEGIN -->
-## Active domain: GSM8K grade-school math (`gsm8k`)
+## Active domain: Unit conversions (`units`)
 
-- Goal: make the model an expert at: Be an expert at grade-school math word problems (GSM8K).
-- Source: hf_dataset - openai/gsm8k (config 'main'); ships with a small offline fallback set for development without network.
+- Goal: make the model an expert at: Be an expert at unit conversions between metric and imperial units of length, mass, volume, and between units of time. Each problem asks to convert a given quantity to a target unit; the answer is a single number. IMPORTANT VERIFIER REQUIREMENT: a small base model cannot produce exact many-decimal answers, so an exact 6-decimal match yields zero learning signal. The verify() function MUST accept an answer when it is within a 1.5% relative tolerance of the reference (use math.isclose(ans, ref, rel_tol=0.015, abs_tol=1e-6)), and should also accept when both values round to 3 significant figures. Include a healthy share of EASY problems (metric-prefix conversions like km->m, and time conversions like hours->seconds) so a base model has a non-zero baseline accuracy.
+- Source: generator - Deterministic seeded generator over exact NIST/US conversion factors (length, mass, volume) and standard time ratios. Roughly half of problems are easy metric-prefix or time conversions; the rest mix metric/imperial cross-system conversions. Train IDs 0-7999, held-out eval IDs 8000+ with prompt-level deduplication against train.
 - Answer format: Final answer on its own line as '#### <number>'.
-- Verifier: Programmatic numeric exact-match: extract the number after '####' (or the last number in the completion), strip commas, compare to the gold numeric answer with a 1e-6 tolerance. No LLM judgement.
-- Baseline accuracy: None
+- Verifier: Programmatic numeric grading: parse the model's number (prefer '#### <number>', else last number), strip commas, accept if math.isclose(ans, ref, rel_tol=0.015, abs_tol=1e-6) OR if both values agree to 3 significant figures. No LLM judgement.
+- Baseline accuracy: 0.75
 <!-- ACTIVE-DOMAIN:END -->
