@@ -1,0 +1,2 @@
+id	timestamp	parent_commit	eval_acc	delta	kept	note
+baseline	2026-06-12T02:10:13	525e040	0.1250	+0.0000	1	baseline train_rl.py

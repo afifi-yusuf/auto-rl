@@ -21,6 +21,38 @@ class AgentUnavailable(RuntimeError):
     """Raised when the SDK or API key is missing; carries guidance text."""
 
 
+_TOKENS_HARDENED = False
+
+
+def _harden_sdk_tokens() -> None:
+    """Work around a cursor-sdk bridge bug.
+
+    The vendored node bridge's arg parser rejects any flag value that starts with
+    "-" (treats it as a missing value). But the SDK mints auth tokens with
+    ``secrets.token_urlsafe(32)``, which starts with "-" ~1.5% of the time,
+    intermittently crashing bridge launch with
+    "Missing value for --tool-callback-auth-token". We replace the token
+    generator with one that never produces a leading "-".
+    """
+    global _TOKENS_HARDENED
+    if _TOKENS_HARDENED:
+        return
+    import secrets
+
+    def _safe_token() -> str:
+        tok = secrets.token_urlsafe(32)
+        return ("a" + tok[1:]) if tok[:1] == "-" else tok
+
+    for mod_name in ("cursor_sdk._tool_callback", "cursor_sdk._store_callback"):
+        try:
+            mod = __import__(mod_name, fromlist=["_new_auth_token"])
+        except Exception:
+            continue
+        if hasattr(mod, "_new_auth_token"):
+            mod._new_auth_token = _safe_token
+    _TOKENS_HARDENED = True
+
+
 def _import_sdk():
     try:
         import cursor_sdk  # noqa: F401
@@ -30,6 +62,7 @@ def _import_sdk():
             "    uv pip install cursor-sdk   (or)   pip install cursor-sdk\n"
             f"(import error: {exc})"
         ) from exc
+    _harden_sdk_tokens()
     from cursor_sdk import Agent, CursorAgentError, LocalAgentOptions
 
     return Agent, CursorAgentError, LocalAgentOptions
