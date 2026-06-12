@@ -36,7 +36,7 @@ import harness
 # ======================= EDITABLE KNOBS (agent tunes these) ================= #
 SEED = 0
 LEARNING_RATE = 1e-6
-GROUP_SIZE = None          # None -> use scale preset (G completions per prompt)
+GROUP_SIZE = 16            # larger G -> lower-variance advantages on hard conversions
 PROMPTS_PER_STEP = None    # None -> use scale preset
 SAMPLING_TEMPERATURE = 1.0
 MAX_NEW_TOKENS = None      # None -> use scale preset
