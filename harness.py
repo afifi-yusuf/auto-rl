@@ -286,8 +286,8 @@ def load_policy(model_id_override: Optional[str] = None, *, eval_mode: bool = Fa
     dtype = torch.float32
     if device == "cuda":
         dtype = torch.bfloat16
-    elif device == "mps":
-        dtype = torch.float16
+    # Note: float16 on MPS is numerically unstable for sampling-based generation
+    # (produces nan/inf logits after weight updates), so we keep float32 on MPS.
 
     tokenizer = AutoTokenizer.from_pretrained(mid)
     if tokenizer.pad_token_id is None:
