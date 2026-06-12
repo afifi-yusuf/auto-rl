@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+
+# uv
+.uv/
+
+# Auto-RL runtime artifacts
+runs/
+*.metrics.json
+metrics.json
+.auto_rl_cache/
+
+# Hugging Face / model caches
+.cache/
+hf_cache/
+
+# OS
+.DS_Store
+
+# Logs (the experiment ledger itself is tracked; ad-hoc logs are not)
+*.log

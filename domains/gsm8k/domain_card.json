@@ -1,0 +1,26 @@
+{
+  "slug": "gsm8k",
+  "domain_text": "Be an expert at grade-school math word problems (GSM8K).",
+  "name": "GSM8K grade-school math",
+  "description": "Multi-step grade-school math word problems with a single integer or decimal answer. The model must reason step by step and produce a final numeric answer.",
+  "source_type": "hf_dataset",
+  "source_detail": "openai/gsm8k (config 'main'); ships with a small offline fallback set for development without network.",
+  "answer_format": "Final answer on its own line as '#### <number>'.",
+  "verifier_description": "Programmatic numeric exact-match: extract the number after '####' (or the last number in the completion), strip commas, compare to the gold numeric answer with a 1e-6 tolerance. No LLM judgement.",
+  "sample_problems": [
+    {
+      "prompt": "Natalia sold clips to 48 friends in April, and then she sold half as many clips in May. How many clips did she sell altogether in April and May?",
+      "reference": "72",
+      "gold_answer": "72"
+    },
+    {
+      "prompt": "Weng earns $12 an hour for babysitting. Yesterday, she just did 50 minutes of babysitting. How much did she earn?",
+      "reference": "10",
+      "gold_answer": "10"
+    }
+  ],
+  "n_train": 7473,
+  "n_eval": 1319,
+  "baseline_accuracy": null,
+  "created_at": "2026-06-11T00:00:00Z"
+}

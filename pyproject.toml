@@ -1,0 +1,38 @@
+[project]
+name = "auto-rl"
+version = "0.1.0"
+description = "Autoresearch-style autonomous RLVR post-training: name a domain in plain text, an agent bootstraps a verifiable reward, then iteratively improves a from-scratch GRPO trainer."
+readme = "README.md"
+# torch wheels currently top out around CPython 3.12. Use 3.10-3.12 for the full
+# ML stack. The offline self-test (selftest.py) runs on any 3.10+.
+requires-python = ">=3.10"
+dependencies = [
+    "torch>=2.2",
+    "transformers>=4.44",
+    "datasets>=2.20",
+    "accelerate>=0.33",
+    "sympy>=1.12",
+    "cursor-sdk>=0.1",
+]
+
+[project.optional-dependencies]
+# Everything except the Cursor SDK, for running training/eval by hand without
+# the autonomous agent loop.
+ml = [
+    "torch>=2.2",
+    "transformers>=4.44",
+    "datasets>=2.20",
+    "accelerate>=0.33",
+    "sympy>=1.12",
+]
+
+[tool.uv]
+# Allow `uv run <script>` to work directly.
+package = false
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["harness.py"]
