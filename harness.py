@@ -32,6 +32,27 @@ from typing import Any, Callable, Iterable, Optional, Protocol, runtime_checkabl
 REPO_ROOT = Path(__file__).resolve().parent
 DOMAINS_DIR = REPO_ROOT / "domains"
 
+
+def load_dotenv(path: Optional[Path] = None) -> None:
+    """Minimal .env loader (no dependency). Existing env vars take precedence."""
+    env_path = path or (REPO_ROOT / ".env")
+    if not env_path.exists():
+        return
+    for raw in env_path.read_text().splitlines():
+        line = raw.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, val = line.split("=", 1)
+        key = key.strip()
+        val = val.strip().strip('"').strip("'")
+        if key:
+            os.environ.setdefault(key, val)
+
+
+# Load .env as soon as the harness is imported so every entry point (train_rl,
+# orchestrator, bootstrap) picks up CURSOR_API_KEY and friends.
+load_dotenv()
+
 # --------------------------------------------------------------------------- #
 # Configuration
 # --------------------------------------------------------------------------- #
@@ -271,7 +292,11 @@ def load_policy(model_id_override: Optional[str] = None, *, eval_mode: bool = Fa
     tokenizer = AutoTokenizer.from_pretrained(mid)
     if tokenizer.pad_token_id is None:
         tokenizer.pad_token = tokenizer.eos_token
-    model = AutoModelForCausalLM.from_pretrained(mid, torch_dtype=dtype)
+    try:
+        # transformers >=5 renamed torch_dtype -> dtype
+        model = AutoModelForCausalLM.from_pretrained(mid, dtype=dtype)
+    except TypeError:
+        model = AutoModelForCausalLM.from_pretrained(mid, torch_dtype=dtype)
     model.to(device)
     if eval_mode:
         model.eval()
