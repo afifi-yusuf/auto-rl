@@ -1,6 +1,8 @@
 # Auto-RL
 
-**An autonomous research pipeline for RLVR post-training, driven end-to-end by Cursor agents.**
+**[autoresearch](https://github.com/karpathy/autoresearch), but for RLVR.**
+
+Karpathy's autoresearch lets an AI agent autonomously improve an LLM *pretraining* script overnight — edit the code, train, measure, keep what works, repeat. Auto-RL does the same thing for **RLVR post-training** (RL with Verifiable Rewards), and takes it one step further: it doesn't just tune a fixed task — it **invents the task itself**.
 
 You name a domain in plain text — *"be an expert at unit conversions"* — and Auto-RL does the rest of the research loop by itself:
 
@@ -9,7 +11,7 @@ You name a domain in plain text — *"be an expert at unit conversions"* — and
 3. **Tunes the hyperparameters and rewrites the algorithm.** Each iteration it forms a hypothesis (learning rate, group size, reward shaping, KL, sampling temperature, ...) and edits the trainer accordingly.
 4. **Runs the recursive train → evaluate → keep/discard loop.** It trains under a fixed budget, scores held-out verified accuracy, commits improvements and reverts regressions, and repeats.
 
-This is the RL analogue of [karpathy/autoresearch](https://github.com/karpathy/autoresearch). Where autoresearch optimizes `val_bpb` on nanochat pretraining, Auto-RL optimizes **held-out verified accuracy** on a domain *you invent in a sentence* — and, crucially, it generates the verifiable reward for that domain automatically, so the entire RLVR research pipeline is automated, not just the hyperparameter search.
+Where autoresearch optimizes `val_bpb` on nanochat pretraining, Auto-RL optimizes **held-out verified accuracy** on a domain you invent in a sentence — and, crucially, it generates the verifiable reward for that domain automatically. The entire RLVR research pipeline is automated, not just the hyperparameter search.
 
 ---
 
