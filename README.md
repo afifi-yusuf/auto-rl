@@ -90,6 +90,19 @@ $ AUTO_RL_DOMAIN=units python orchestrator.py --iterations 3
 
 That last line is the whole point: the model got **better at a domain that didn't exist a minute earlier**, with the dataset, reward, training code, and the improving change all produced autonomously.
 
+**A different *shape* of domain — forecasting *resolved* prediction markets:**
+
+```
+$ python bootstrap.py "forecast the outcome of RESOLVED Polymarket markets as YES/NO ..." --slug polymarket
+[agent] no HF dataset exists -> fetches resolved binary markets from the Polymarket Gamma API,
+        caches them locally, and bakes in 28 offline fallback markets (2020 election, BTC milestones, Super Bowl 55, ...)
+[bootstrap] verifier: extract '#### YES'/'#### NO', normalize, exact-match vs the real resolution (no LLM)
+[bootstrap] validation passed: train/eval disjoint, verifier accepts gold & rejects wrong
+[bootstrap] baseline_acc = 0.625   ->  approved + LOCKED   (4,946 train / 1,229 eval at full scale)
+```
+
+Same one-sentence interface, but the agent had to **source real-world ground truth** (live API + a baked-in offline fallback) and write a normalized string-match verifier — a different problem shape from the deterministic generator it wrote for `units`.
+
 ---
 
 ## How it works
@@ -132,7 +145,7 @@ The orchestrator owns the experiment harness; the Cursor agent is the "mutation 
 | `experiments.tsv` | Append-only ledger of every experiment. | orchestrator |
 | `selftest.py` | Offline self-test (no torch/network/API needed). | — |
 
-Built-in example domains: **`gsm8k`** (math) and **`units`** (auto-generated unit conversions).
+Built-in example domains: **`gsm8k`** (math), **`units`** (auto-generated unit conversions), and **`polymarket`** (forecasting resolved prediction markets, YES/NO).
 
 ## Requirements
 
@@ -178,6 +191,7 @@ AUTO_RL_DOMAIN=gsm8k AUTO_RL_SCALE=smoke python orchestrator.py --iterations 20 
 python bootstrap.py "be an expert at converting Roman numerals to integers"
 python bootstrap.py "solve single-variable linear equations for x" --slug algebra
 python bootstrap.py "be an expert at unit conversions" --slug units
+python bootstrap.py "forecast the outcome of resolved Polymarket markets as YES/NO" --slug polymarket
 ```
 
 Bootstrap will: generate the pack, validate it, measure the base model's baseline (headroom check), show you a summary, and ask for approval before locking it. Then:
