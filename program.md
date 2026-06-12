@@ -68,5 +68,11 @@ Tab-separated, append-only ledger of every experiment:
 the main line of progress; `kept=0` rows were reverted. Use it as memory.
 
 <!-- ACTIVE-DOMAIN:BEGIN -->
-*(The orchestrator injects the active domain card here at runtime.)*
+## Active domain: GSM8K grade-school math (`gsm8k`)
+
+- Goal: make the model an expert at: Be an expert at grade-school math word problems (GSM8K).
+- Source: hf_dataset - openai/gsm8k (config 'main'); ships with a small offline fallback set for development without network.
+- Answer format: Final answer on its own line as '#### <number>'.
+- Verifier: Programmatic numeric exact-match: extract the number after '####' (or the last number in the completion), strip commas, compare to the gold numeric answer with a 1e-6 tolerance. No LLM judgement.
+- Baseline accuracy: None
 <!-- ACTIVE-DOMAIN:END -->
