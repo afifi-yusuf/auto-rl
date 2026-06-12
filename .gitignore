@@ -19,6 +19,9 @@ metrics.json
 .cache/
 hf_cache/
 
+# Domain pack fetched data caches (regenerable from API; offline fallback is baked into prepare.py)
+domains/**/resolved_markets.json
+
 # OS
 .DS_Store
 

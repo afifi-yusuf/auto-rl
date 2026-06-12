@@ -1,0 +1,31 @@
+{
+  "slug": "polymarket",
+  "domain_text": "Forecast the outcome of RESOLVED Polymarket prediction markets. Each problem gives a real prediction-market question (and optionally a short description / close date) for a market that has ALREADY resolved, and the model must predict the binary outcome as YES or NO. The reference/ground-truth is the actual resolution. Verifier: extract a YES/NO answer from the completion (prefer a '#### YES' or '#### NO' marker, else detect the words yes/no) and do a normalized exact string match against the resolved outcome - fully programmatic, no LLM judgement. DATA SOURCE: prefer fetching resolved markets + resolutions from the Polymarket public Gamma API (https://gamma-api.polymarket.com/markets?closed=true) and CACHE them to a local JSON file under the domain folder on first run; BUT you MUST also ship a baked-in fallback set of at least 24 real, well-known resolved markets with correct YES/NO outcomes (major elections, sports finals, crypto milestones) so the pack works with no network, exactly like the gsm8k offline fallback. Make train and eval splits disjoint.",
+  "name": "Polymarket resolved forecasts",
+  "description": "Forecast the binary outcome of resolved Polymarket prediction markets. Each problem is a real closed market question (with optional description and close date); the model must predict YES or NO as it would have before resolution. Ground truth is the actual market resolution.",
+  "source_type": "synthetic",
+  "source_detail": "Polymarket Gamma API (https://gamma-api.polymarket.com/markets?closed=true) for resolved binary Yes/No markets, cached to domains/polymarket/resolved_markets.json on first fetch; 28 baked-in offline fallback markets (2020 election, crypto milestones, Super Bowl, Oscars, UFC) when offline.",
+  "answer_format": "Final forecast on its own line as '#### YES' or '#### NO'.",
+  "verifier_description": "Programmatic normalized exact-match: extract YES/NO from the completion (prefer the '#### YES'/'#### NO' marker, else the last standalone yes/no token), uppercase, and compare to the resolved outcome string. No LLM judgement.",
+  "sample_problems": [
+    {
+      "prompt": "Will Trump win the 2020 U.S. presidential election?",
+      "reference": "NO",
+      "gold_answer": "NO"
+    },
+    {
+      "prompt": "Will $BTC break $20k before 2021?",
+      "reference": "YES",
+      "gold_answer": "YES"
+    },
+    {
+      "prompt": "Will Joe Biden be inaugurated as President of the USA on January 20th, 2021?",
+      "reference": "YES",
+      "gold_answer": "YES"
+    }
+  ],
+  "n_train": 4946,
+  "n_eval": 1229,
+  "baseline_accuracy": 0.625,
+  "created_at": "2026-06-11T00:00:00Z"
+}
